@@ -8,6 +8,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.11'
 
 gem 'redis', '~> 4.0'
+gem 'sidekiq', '~> 5.1.3'
 gem 'bcrypt', '~> 3.1.7'
 gem 'mini_magick', '~> 4.8'
 
@@ -15,6 +16,8 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development, :test do
   gem 'pry-rails'
+  gem 'dotenv-rails'
+  gem 'letter_opener'
 end
 
 group :development do
