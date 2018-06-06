@@ -14,6 +14,12 @@ gem 'mini_magick', '~> 4.8'
 
 gem 'bootsnap', '>= 1.1.0', require: false
 
+gem 'pundit', '~> 1.1.0'
+gem 'rolify', '~> 5.2.0'
+gem 'doorkeeper', '~> 4.3.2'
+
+gem 'active_model_serializers', '~> 0.10.7'
+
 group :development, :test do
   gem 'pry-rails'
   gem 'dotenv-rails'

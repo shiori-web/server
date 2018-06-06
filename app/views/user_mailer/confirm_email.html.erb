@@ -4,6 +4,7 @@
   </head>
   <body>
     <h1><%= t('emails.users.confirm.title', name: @user.name) %></h1>
-    <p><%= t('emails.users.confirm.content', url: confirm_url(token: @user.confirm_token, redirect_to: @redirect_url)) %></p>
+    <% url = confirm_url(token: @user.confirm_token, redirect_to: @redirect_url) %>
+    <p><%= t('emails.users.confirm.content', url: link_to(url, url)).html_safe %></p>
   </body>
 </html>

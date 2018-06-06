@@ -9,6 +9,7 @@ module Users
     def register!
       validate!
       user = create_user!
+      add_member_role(user)
       send_confirm_email(user)
     end
 
@@ -27,6 +28,10 @@ module Users
         confirm_token: confirm_token,
         encrypted_password: encrypted_password
       )
+    end
+
+    def add_member_role(user)
+      user.add_role(:member)
     end
 
     def send_confirm_email(user)
