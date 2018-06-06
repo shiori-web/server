@@ -14,6 +14,7 @@ gem 'mini_magick', '~> 4.8'
 
 gem 'bootsnap', '>= 1.1.0', require: false
 
+gem 'rack-cors', '~> 1.0.2'
 gem 'pundit', '~> 1.1.0'
 gem 'rolify', '~> 5.2.0'
 gem 'doorkeeper', '~> 4.3.2'

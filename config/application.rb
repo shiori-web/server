@@ -25,5 +25,12 @@ module Shiori
     config.i18n.default_locale = :en
     config.i18n.available_locales = [:en, :km]
     config.active_job.queue_adapter = :sidekiq
+
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins '*'
+        resource '*', headers: :any, methods: %i[get post options]
+      end
+    end
   end
 end

@@ -18,8 +18,8 @@ class User < ApplicationRecord
 
   before_save -> { self.email = email.downcase }
 
-  def self.authenticate(identifier, password)
-    user = self.where('username = :identifier OR email = :identifier', { identifier: identifier }).first
+  def self.authenticate(username, password)
+    user = self.where('username = :username OR email = :username', { username: username }).first
     user if user && BCrypt::Password.new(user.encrypted_password) == password && user.confirmed?
   end
 end
