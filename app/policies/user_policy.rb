@@ -12,10 +12,19 @@ class UserPolicy < ApplicationPolicy
     user&.id == record&.id
   end
 
-  def permitted_attributes
+  def fetchable_fields
+    all = %i[name username email]
+    owner? ? all : all - [:email]
+  end
+
+  def creatable_fields
     %i(
       name username email
       password redirect_url
     )
+  end
+
+  def updatable_fields
+    creatable_fields - [:redirect_url]
   end
 end

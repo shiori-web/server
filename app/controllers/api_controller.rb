@@ -1,23 +1,20 @@
 class ApiController < ActionController::API
   include Pundit
+  include JSONAPI::Utils
 
   after_action :verify_authorized
   after_action :verify_policy_scoped
 
   rescue_from Pundit::NotAuthorizedError do
-    render_error 403, '403 Forbidden!'
+    jsonapi_render_errors UnauthorizedError.new, status: 403
   end
 
-  rescue_from ActiveRecord::RecordNotFound do
-    render_error 404, '404 Not found!'
+  rescue_from ActiveRecord::RecordNotFound do |ex|
+    jsonapi_render_not_found ex
   end
 
   rescue_from ActiveRecord::RecordInvalid do |ex|
-    render json: {
-      code: 422,
-      errors: ex.record.errors,
-      full_messages: ex.record.errors.full_messages
-    }, status: 422
+    jsonapi_render_errors json: ex.record, status: 422
   end
 
   def current_user
@@ -26,7 +23,7 @@ class ApiController < ActionController::API
 
   def authenticate_user!
     unless current_user
-      render_error 401, '401 Unauthenticate!'
+      jsonapi_render_errors UnauthenticatedError.new, status: 401
     end
   end
 
@@ -34,9 +31,7 @@ class ApiController < ActionController::API
     ::Pundit.policy!(current_user, resource)
   end
 
-  private
-
-  def render_error(code, message)
-    render json: { code: code, error: message }, status: code
+  def context
+    { user: current_user }
   end
 end

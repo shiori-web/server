@@ -18,7 +18,7 @@ gem 'pundit', '~> 1.1.0'
 gem 'rolify', '~> 5.2.0'
 gem 'doorkeeper', '~> 4.3.2'
 
-gem 'active_model_serializers', '~> 0.10.7'
+gem 'jsonapi-utils', '~> 0.7.2'
 
 group :development, :test do
   gem 'pry-rails'

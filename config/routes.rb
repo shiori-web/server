@@ -3,7 +3,5 @@ Rails.application.routes.draw do
 
   get 'confirm' => 'registrations#show'
 
-  namespace :api do
-    resources :users, except: [:new, :edit]
-  end
+  jsonapi_resources :users
 end

@@ -12,13 +12,18 @@ module Api
 
     def show
       authorize @user, :show?
+      render json: @user, serializer: serializer
+    end
 
-      if policy!(@user).owner?
-        serializer = Users::OwnerSerializer
-      else
-        serializer = UserSerializer
-      end
+    def update
+      authorize @user, :update?
+      @user.update_attributes!(permitted_attributes(@user))
+      render json: @user, serializer: serializer
+    end
 
+    def destroy
+      authorize @user, :destroy?
+      @user.destroy
       render json: @user, serializer: serializer
     end
 
@@ -26,6 +31,14 @@ module Api
 
     def find_user
       @user = policy_scope(User).find(params[:id])
+    end
+
+    def serializer
+      if policy!(@user).owner?
+        Users::OwnerSerializer
+      else
+        UserSerializer
+      end
     end
   end
 end
