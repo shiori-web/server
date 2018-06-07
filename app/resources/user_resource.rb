@@ -4,6 +4,6 @@ class UserResource < BaseResource
 
   filter :self, apply: ->(records, _, opts) do
     current_user = opts[:context].try(:[], :user)
-    current_user ? records.where(id: current_user.id) : records
+    current_user ? records.where(id: current_user.id) : records.none
   end
 end
