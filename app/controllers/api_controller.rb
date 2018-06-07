@@ -34,4 +34,8 @@ class ApiController < ActionController::API
   def context
     { user: current_user }
   end
+
+  def apply_filter(records, opts)
+    resource_klass.apply_filters(records, filter_params, context: context)
+  end
 end
