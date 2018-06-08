@@ -10,10 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_06_084247) do
+ActiveRecord::Schema.define(version: 2018_06_08_043145) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "hstore"
   enable_extension "plpgsql"
+
+  create_table "animes", force: :cascade do |t|
+    t.hstore "titles", null: false
+    t.string "slug", null: false
+    t.text "desc"
+    t.string "cover"
+    t.integer "status", default: 0
+    t.date "started_at"
+    t.date "ended_at"
+    t.integer "show_type", default: 0
+    t.integer "age_rating"
+    t.string "age_rating_guide"
+    t.string "adaptation"
+    t.integer "episode_duration"
+    t.string "sub_titles", array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_animes_on_slug", unique: true
+  end
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer "resource_owner_id", null: false

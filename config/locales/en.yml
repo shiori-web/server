@@ -2,6 +2,7 @@ en:
   errors:
     messages:
       not_email: "is not a valid email address"
+      en_title_not_exist: "must have at least one English title"
 
   activemodel:
     errors:
