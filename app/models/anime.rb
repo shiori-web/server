@@ -27,12 +27,12 @@ class Anime < ApplicationRecord
 
   def slug_candidates
     candidates = [ -> { title } ]
-    if show_type == :TV
+    if show_type == 'TV'
       candidates << -> { [title, year] }
     else
       candidates << -> { [title, show_type] }
-      candidates << -> { [title, show_type, year] }
     end
+    candidates << -> { [title, show_type, year] }
     candidates
   end
 end

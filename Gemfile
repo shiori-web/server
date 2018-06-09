@@ -19,7 +19,7 @@ gem 'pundit', '~> 1.1.0'
 gem 'rolify', '~> 5.2.0'
 gem 'doorkeeper', '~> 4.3.2'
 
-gem 'friendly_id', '~> 5.1.0'
+gem 'friendly_id', '~> 5.2.4'
 gem 'jsonapi-utils', '~> 0.7.2'
 gem 'jsonapi-authorization', '~> 1.0.0.alpha6'
 
@@ -27,6 +27,8 @@ group :development, :test do
   gem 'pry-rails'
   gem 'dotenv-rails'
   gem 'letter_opener'
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
 end
 
 group :development do
@@ -34,4 +36,10 @@ group :development do
   gem 'web-console', '>= 3.3.0'
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'spring-watcher-listen', '~> 2.0.0'
+end
+
+group :test do
+  gem 'faker'
+  gem 'database_cleaner'
+  gem 'shoulda-matchers'
 end
