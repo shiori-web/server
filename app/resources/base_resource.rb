@@ -1,4 +1,6 @@
 class BaseResource < JSONAPI::Resource
+  include JSONAPI::Authorization::PunditScopedResource
+
   abstract
 
   class << self
@@ -7,11 +9,11 @@ class BaseResource < JSONAPI::Resource
     end
 
     def creatable_fields(context)
-      policy!(context[:user], _model_class).try(:creatable_fields) || super
+      policy!(context[:user], _model_class).try(:creatable_fields, super) || super
     end
 
     def updatable_fields(context)
-      policy!(context[:user], _model_class).try(:updatable_fields) || super
+      policy!(context[:user], _model_class).try(:updatable_fields, super) || super
     end
   end
 
@@ -20,6 +22,6 @@ class BaseResource < JSONAPI::Resource
   end
 
   def fetchable_fields
-    policy!(context[:user], _model).try(:fetchable_fields) || super
+    policy!(context[:user], _model).try(:fetchable_fields, super) || super
   end
 end

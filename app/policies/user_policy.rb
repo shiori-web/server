@@ -12,19 +12,12 @@ class UserPolicy < ApplicationPolicy
     user&.id == record&.id
   end
 
-  def fetchable_fields
-    all = %i[name username email]
+  def fetchable_fields(all)
+    all = all - %i[password redirect_url]
     owner? ? all : all - [:email]
   end
 
-  def creatable_fields
-    %i(
-      name username email
-      password redirect_url
-    )
-  end
-
-  def updatable_fields
-    creatable_fields - [:redirect_url]
+  def updatable_fields(all)
+    all - [:redirect_url]
   end
 end

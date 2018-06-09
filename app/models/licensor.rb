@@ -1,0 +1,2 @@
+class Licensor < Producer
+end

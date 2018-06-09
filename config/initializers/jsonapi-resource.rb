@@ -21,9 +21,13 @@ JSONAPI.configure do |config|
   config.top_level_meta_include_page_count = true
   config.top_level_meta_page_count_key = :page_count
 
+  config.use_relationship_reflection = true
+
   config.use_text_errors = false
 
-  config.exception_class_whitelist = []
+  config.exception_class_whitelist = [Pundit::NotAuthorizedError]
 
   config.always_include_to_one_linkage_data = false
+
+  config.default_processor_klass = JSONAPI::Authorization::AuthorizingProcessor
 end

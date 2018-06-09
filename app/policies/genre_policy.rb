@@ -1,0 +1,1 @@
+class GenrePolicy < ApplicationPolicy; end

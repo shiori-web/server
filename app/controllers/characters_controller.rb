@@ -1,0 +1,1 @@
+class CharactersController < ApiController; end

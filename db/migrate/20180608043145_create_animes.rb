@@ -5,7 +5,6 @@ class CreateAnimes < ActiveRecord::Migration[5.2]
       t.string :slug, null: false
       t.text :desc
       t.string :cover
-      t.integer :status, default: 0
       t.date :started_at
       t.date :ended_at
       t.integer :show_type, default: 0

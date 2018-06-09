@@ -1,0 +1,1 @@
+class TagsController < ApiController; end

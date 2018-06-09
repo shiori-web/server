@@ -4,21 +4,26 @@ module Titleable
   included do
     validates :titles, presence: true
     validate :has_en_title
+  end
 
-    def sub_titles=(titles)
-      self[:sub_titles] =
-        case titles
-        when Array, Range
-          titles.map(&:to_s)
-        else
-          [titles.to_s]
-        end
-    end
+  def title
+    titles.try(:[], 'en_jp')
+  end
+
+  def sub_titles=(titles)
+    self[:sub_titles] =
+      case titles
+      when Array, Range
+        titles.map(&:to_s)
+      else
+        [titles.to_s]
+      end
   end
 
   private
 
   def has_en_title?
+    return false if titles.nil?
     titles.keys.any? { |key| key.start_with?('en_') }
   end
 

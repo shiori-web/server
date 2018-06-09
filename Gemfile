@@ -19,7 +19,9 @@ gem 'pundit', '~> 1.1.0'
 gem 'rolify', '~> 5.2.0'
 gem 'doorkeeper', '~> 4.3.2'
 
+gem 'friendly_id', '~> 5.1.0'
 gem 'jsonapi-utils', '~> 0.7.2'
+gem 'jsonapi-authorization', '~> 1.0.0.alpha6'
 
 group :development, :test do
   gem 'pry-rails'

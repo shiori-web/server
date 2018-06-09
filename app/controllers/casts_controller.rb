@@ -1,0 +1,1 @@
+class CastsController < ApiController; end

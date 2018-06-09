@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_08_043145) do
+ActiveRecord::Schema.define(version: 2018_06_09_035840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -21,7 +21,6 @@ ActiveRecord::Schema.define(version: 2018_06_08_043145) do
     t.string "slug", null: false
     t.text "desc"
     t.string "cover"
-    t.integer "status", default: 0
     t.date "started_at"
     t.date "ended_at"
     t.integer "show_type", default: 0
@@ -33,6 +32,61 @@ ActiveRecord::Schema.define(version: 2018_06_08_043145) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_animes_on_slug", unique: true
+  end
+
+  create_table "casts", force: :cascade do |t|
+    t.integer "locale", null: false
+    t.bigint "person_id"
+    t.bigint "character_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_id"], name: "index_casts_on_character_id"
+    t.index ["person_id"], name: "index_casts_on_person_id"
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.bigint "genre_id"
+    t.string "categorizable_type"
+    t.bigint "categorizable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["categorizable_type", "categorizable_id"], name: "index_categories_on_categorizable_type_and_categorizable_id"
+    t.index ["genre_id"], name: "index_categories_on_genre_id"
+  end
+
+  create_table "characters", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "avatar"
+    t.integer "gender"
+    t.hstore "info"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "companies", force: :cascade do |t|
+    t.string "name", null: false
+    t.hstore "info"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "friendly_id_slugs", force: :cascade do |t|
+    t.string "slug", null: false
+    t.integer "sluggable_id", null: false
+    t.string "sluggable_type", limit: 50
+    t.string "scope"
+    t.datetime "created_at"
+    t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
+    t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
+    t.index ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id"
+    t.index ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"
+  end
+
+  create_table "genres", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_genres_on_name", unique: true
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
@@ -75,6 +129,36 @@ ActiveRecord::Schema.define(version: 2018_06_08_043145) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
+  create_table "people", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "avatar"
+    t.integer "gender"
+    t.hstore "info"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "performers", force: :cascade do |t|
+    t.integer "role", null: false
+    t.bigint "character_id"
+    t.string "performable_type"
+    t.bigint "performable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_id"], name: "index_performers_on_character_id"
+    t.index ["performable_type", "performable_id"], name: "index_performers_on_performable_type_and_performable_id"
+  end
+
+  create_table "producers", force: :cascade do |t|
+    t.string "type"
+    t.bigint "anime_id"
+    t.bigint "company_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["anime_id"], name: "index_producers_on_anime_id"
+    t.index ["company_id"], name: "index_producers_on_company_id"
+  end
+
   create_table "roles", force: :cascade do |t|
     t.string "name"
     t.string "resource_type"
@@ -83,6 +167,33 @@ ActiveRecord::Schema.define(version: 2018_06_08_043145) do
     t.datetime "updated_at", null: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
+  end
+
+  create_table "staffs", force: :cascade do |t|
+    t.string "role", null: false
+    t.bigint "anime_id"
+    t.bigint "person_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["anime_id"], name: "index_staffs_on_anime_id"
+    t.index ["person_id"], name: "index_staffs_on_person_id"
+  end
+
+  create_table "taggings", force: :cascade do |t|
+    t.bigint "tag_id"
+    t.string "taggable_type"
+    t.bigint "taggable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+    t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable_type_and_taggable_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -108,8 +219,17 @@ ActiveRecord::Schema.define(version: 2018_06_08_043145) do
     t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
+  add_foreign_key "casts", "characters"
+  add_foreign_key "casts", "people"
+  add_foreign_key "categories", "genres"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
+  add_foreign_key "performers", "characters"
+  add_foreign_key "producers", "animes"
+  add_foreign_key "producers", "companies"
+  add_foreign_key "staffs", "animes"
+  add_foreign_key "staffs", "people"
+  add_foreign_key "taggings", "tags"
 end

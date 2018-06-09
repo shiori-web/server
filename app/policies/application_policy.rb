@@ -15,7 +15,7 @@ class ApplicationPolicy
   end
 
   def create?
-    false
+    admin?
   end
   alias_method :update?, :create?
   alias_method :destroy?, :create?

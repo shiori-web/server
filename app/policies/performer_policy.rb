@@ -1,0 +1,1 @@
+class PerformerPolicy < ApplicationPolicy; end

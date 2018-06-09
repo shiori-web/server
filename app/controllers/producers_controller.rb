@@ -1,0 +1,1 @@
+class ProducersController < ApiController; end

@@ -1,11 +1,10 @@
-class UsersController < ::ApiController
+class UsersController < ApiController
   before_action :find_user, except: [:create, :index]
 
   def index
-    authorize User, :index?
-    users = User.all
+    authorize scope, :index?
 
-    skip_policy_scope
+    users = scope.all
     jsonapi_render json: users
   end
 
@@ -37,6 +36,10 @@ class UsersController < ::ApiController
   private
 
   def find_user
-    @user = policy_scope(User).find(params[:id])
+    @user = scope.find(params[:id])
+  end
+
+  def scope
+    policy_scope(User)
   end
 end

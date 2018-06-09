@@ -1,0 +1,2 @@
+class Studio < Producer
+end

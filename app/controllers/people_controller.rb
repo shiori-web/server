@@ -1,0 +1,1 @@
+class PeopleController < ApiController; end

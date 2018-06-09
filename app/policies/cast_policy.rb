@@ -1,0 +1,1 @@
+class CastPolicy < ApplicationPolicy; end

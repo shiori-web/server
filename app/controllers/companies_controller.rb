@@ -1,0 +1,1 @@
+class CompaniesController < ApiController; end
