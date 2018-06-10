@@ -25,6 +25,10 @@ module Shiori
     config.i18n.default_locale = :en
     config.i18n.available_locales = [:en, :km]
 
+    lib_dirs = Dir[Rails.root.join('lib').to_s]
+    config.autoload_paths += lib_dirs
+    config.eager_load_paths += lib_dirs
+
     config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins '*'
