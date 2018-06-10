@@ -20,9 +20,9 @@ module Uploadable
       end
 
       if versions = opts[:versions]
-        versions.each do |version, resize_opts|
+        versions.each do |version, flag|
           define_method "#{version}_#{field}_url" do
-            UrlService.url_for public_send(field).variant(resize_opts)
+            UrlService.url_for public_send(field).variant(resize: flag)
           end
         end
       end

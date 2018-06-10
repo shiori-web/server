@@ -13,7 +13,7 @@ class Anime < ApplicationRecord
   has_many :staffs, dependent: :destroy
 
   uploadable_field :cover, versions: {
-    small: { resize: '225x320>' }
+    small: '225x320>'
   }
 
   def status

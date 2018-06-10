@@ -49,7 +49,6 @@ ActiveRecord::Schema.define(version: 2018_06_10_060926) do
     t.string "adaptation"
     t.integer "episode_duration"
     t.string "sub_titles", array: true
-    t.string "cover_upload_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_animes_on_slug", unique: true
@@ -224,7 +223,6 @@ ActiveRecord::Schema.define(version: 2018_06_10_060926) do
     t.string "confirm_token"
     t.boolean "confirmed", default: false
     t.string "encrypted_password", null: false
-    t.string "avatar_upload_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["confirm_token"], name: "index_users_on_confirm_token", unique: true

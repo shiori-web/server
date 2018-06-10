@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include Uploadable
+
   rolify
 
   has_many :access_grants,
@@ -11,7 +13,10 @@ class User < ApplicationRecord
     foreign_key: :resource_owner_id,
     class_name: 'Doorkeeper::AccessToken'
 
-  has_one_attached :avatar
+  uploadable_field :avatar, versions: {
+    big: '100x100>',
+    small: '40x40>'
+  }
 
   validates_presence_of :name, :username, :email
   validates_uniqueness_of :username, :email
