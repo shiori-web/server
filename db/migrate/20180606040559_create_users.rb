@@ -3,11 +3,11 @@ class CreateUsers < ActiveRecord::Migration[5.2]
     create_table :users do |t|
       t.string :name, null: false
       t.string :email, null: false
-      t.string :avatar
       t.string :username, null: false
       t.string :confirm_token
       t.boolean :confirmed, default: false
       t.string :encrypted_password, null: false
+      t.string :avatar_upload_url
 
       t.timestamps
     end

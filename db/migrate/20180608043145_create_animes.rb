@@ -4,7 +4,6 @@ class CreateAnimes < ActiveRecord::Migration[5.2]
       t.hstore :titles, null: false
       t.string :slug, null: false
       t.text :desc
-      t.string :cover
       t.date :started_at
       t.date :ended_at
       t.integer :show_type, default: 0
@@ -13,6 +12,7 @@ class CreateAnimes < ActiveRecord::Migration[5.2]
       t.string :adaptation
       t.integer :episode_duration
       t.string :sub_titles, array: true
+      t.string :cover_upload_url
 
       t.timestamps
     end

@@ -11,6 +11,8 @@ class User < ApplicationRecord
     foreign_key: :resource_owner_id,
     class_name: 'Doorkeeper::AccessToken'
 
+  has_one_attached :avatar
+
   validates_presence_of :name, :username, :email
   validates_uniqueness_of :username, :email
   validates_length_of :name, :username, maximum: 100

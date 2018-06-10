@@ -11,6 +11,7 @@ gem 'redis', '~> 4.0'
 gem 'sidekiq', '~> 5.1.3'
 gem 'bcrypt', '~> 3.1.7'
 gem 'mini_magick', '~> 4.8'
+gem 'image_processing', '~> 1.2'
 
 gem 'bootsnap', '>= 1.1.0', require: false
 
@@ -42,4 +43,8 @@ group :test do
   gem 'faker'
   gem 'database_cleaner'
   gem 'shoulda-matchers'
+end
+
+group :production do
+  gem 'aws-sdk-s3', require: false
 end

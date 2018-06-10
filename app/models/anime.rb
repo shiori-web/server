@@ -1,6 +1,7 @@
 class Anime < ApplicationRecord
   include Media
   include AgeRatings
+  include Uploadable
 
   enum show_type: %i[NA TV Movie OVA ONA Special Music]
 
@@ -10,6 +11,10 @@ class Anime < ApplicationRecord
   has_many :performers, as: :performable, dependent: :destroy
   has_many :characters, through: :performers
   has_many :staffs, dependent: :destroy
+
+  uploadable_field :cover, versions: {
+    small: { resize: '225x320>' }
+  }
 
   def status
     if started_at.nil?
