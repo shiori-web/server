@@ -1,19 +1,21 @@
 module MyAnimeList
   class Anime < Base
     def process(node)
-      data = dates(node).merge(
-        rating(node)
+      sidebar = node.xpath('//td[@class="borderClass"]').first
+      data = dates(sidebar).merge(
+        rating(sidebar)
       )
 
       data.merge(
-        cover: cover(node),
-        titles: titles(node),
-        show_type: show_type(node),
-        sub_titles: sub_titles(node),
-        producers: producers(node),
-        studios: studios(node),
-        licensors: licensors(node),
-        genres: genres(node)
+        desc: desc(node),
+        cover: cover(sidebar),
+        titles: titles(sidebar),
+        show_type: show_type(sidebar),
+        sub_titles: sub_titles(sidebar),
+        producers: producers(sidebar),
+        studios: studios(sidebar),
+        licensors: licensors(sidebar),
+        genres: genres(sidebar)
       )
     end
 
@@ -93,6 +95,10 @@ module MyAnimeList
         next if a.text.strip == 'add some'
         a.text.strip
       end.compact
+    end
+
+    def desc(node)
+      node.xpath('//span[@itemprop="description"]').text.strip
     end
 
     def parse_date(date_str)
