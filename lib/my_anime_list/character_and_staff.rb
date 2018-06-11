@@ -66,7 +66,7 @@ module MyAnimeList
     end
 
     def request
-      @res ||= Net::HTTP.get_response(URI(url))
+      @res ||= Net::HTTP.get_response(uri)
     end
 
     def table_for(node, text)
@@ -76,6 +76,14 @@ module MyAnimeList
     def get_id(url)
       match = url.match(/\Ahttps:\/\/.*\/.*\/(\d+)\/.*/)
       match.captures.first if match
+    end
+
+    def uri
+      begin
+        URI.parse(url)
+      rescue URI::InvalidURIError
+        URI.parse(URI.escape(url))
+      end
     end
   end
 end

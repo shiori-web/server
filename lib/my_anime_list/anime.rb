@@ -39,8 +39,7 @@ module MyAnimeList
     end
 
     def cover(node)
-      url = node.xpath('//img[@itemprop="image"]/@src').text.strip
-      { io: open(url), filename: File.basename(url) }
+      node.xpath('//img[@itemprop="image"]/@src').text.strip
     end
 
     def show_type(node)
