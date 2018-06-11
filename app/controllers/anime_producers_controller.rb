@@ -1,0 +1,1 @@
+class AnimeProducersController < ApiController; end

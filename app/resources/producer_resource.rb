@@ -1,3 +1,3 @@
 class ProducerResource < BaseResource
-  attributes :type, :name, :info
+  attributes :name, :info
 end

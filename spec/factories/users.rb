@@ -3,7 +3,8 @@ FactoryBot.define do
     sequence(:name) { |n| "Name #{n+1}" }
     sequence(:username) { |n| "Username #{n+1}" }
     sequence(:email) { |n| "user#{n+1}@example.com" }
-    sequence(:encrypted_password) { |n| BCrypt::Password.create("secret@#{n+1}") }
+    password 'secret123'
+    redirect_url 'http://localhost:3000'
 
     factory :admin do
       after(:create) do |user|

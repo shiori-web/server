@@ -1,1 +1,0 @@
-class PerformersController < ApiController; end

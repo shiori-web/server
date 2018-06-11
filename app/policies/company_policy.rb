@@ -1,1 +1,0 @@
-class CompanyPolicy < ApplicationPolicy; end

@@ -1,0 +1,1 @@
+class ProducerPolicy < ApplicationPolicy; end

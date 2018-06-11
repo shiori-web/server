@@ -14,10 +14,11 @@ class AnimeResource < BaseResource
 
   attributes *(FIELDS + VIRTUAL_FIELDS)
 
+  has_many :casts
   has_many :characters
   has_many :genres
-  has_many :performers
   has_many :producers
+  has_many :anime_producers
   has_many :staffs
   has_many :tags
 end

@@ -1,3 +1,3 @@
 class CastResource < BaseResource
-  attributes :locale
+  attributes :role, :locale
 end

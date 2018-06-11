@@ -37,6 +37,16 @@ ActiveRecord::Schema.define(version: 2018_06_10_060926) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
+  create_table "anime_producers", force: :cascade do |t|
+    t.integer "role", null: false
+    t.bigint "anime_id"
+    t.bigint "producer_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["anime_id"], name: "index_anime_producers_on_anime_id"
+    t.index ["producer_id"], name: "index_anime_producers_on_producer_id"
+  end
+
   create_table "animes", force: :cascade do |t|
     t.hstore "titles", null: false
     t.string "slug", null: false
@@ -55,11 +65,14 @@ ActiveRecord::Schema.define(version: 2018_06_10_060926) do
   end
 
   create_table "casts", force: :cascade do |t|
+    t.integer "role", null: false
     t.integer "locale", null: false
+    t.bigint "anime_id"
     t.bigint "person_id"
     t.bigint "character_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["anime_id"], name: "index_casts_on_anime_id"
     t.index ["character_id"], name: "index_casts_on_character_id"
     t.index ["person_id"], name: "index_casts_on_person_id"
   end
@@ -78,13 +91,6 @@ ActiveRecord::Schema.define(version: 2018_06_10_060926) do
     t.string "name", null: false
     t.string "avatar"
     t.integer "gender"
-    t.hstore "info"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "companies", force: :cascade do |t|
-    t.string "name", null: false
     t.hstore "info"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -158,25 +164,11 @@ ActiveRecord::Schema.define(version: 2018_06_10_060926) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "performers", force: :cascade do |t|
-    t.integer "role", null: false
-    t.bigint "character_id"
-    t.string "performable_type"
-    t.bigint "performable_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["character_id"], name: "index_performers_on_character_id"
-    t.index ["performable_type", "performable_id"], name: "index_performers_on_performable_type_and_performable_id"
-  end
-
   create_table "producers", force: :cascade do |t|
-    t.string "type"
-    t.bigint "anime_id"
-    t.bigint "company_id"
+    t.string "name", null: false
+    t.hstore "info"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["anime_id"], name: "index_producers_on_anime_id"
-    t.index ["company_id"], name: "index_producers_on_company_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -238,6 +230,9 @@ ActiveRecord::Schema.define(version: 2018_06_10_060926) do
     t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
+  add_foreign_key "anime_producers", "animes"
+  add_foreign_key "anime_producers", "producers"
+  add_foreign_key "casts", "animes"
   add_foreign_key "casts", "characters"
   add_foreign_key "casts", "people"
   add_foreign_key "categories", "genres"
@@ -245,9 +240,6 @@ ActiveRecord::Schema.define(version: 2018_06_10_060926) do
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
-  add_foreign_key "performers", "characters"
-  add_foreign_key "producers", "animes"
-  add_foreign_key "producers", "companies"
   add_foreign_key "staffs", "animes"
   add_foreign_key "staffs", "people"
   add_foreign_key "taggings", "tags"

@@ -12,6 +12,7 @@ gem 'sidekiq', '~> 5.1.3'
 gem 'bcrypt', '~> 3.1.7'
 gem 'mini_magick', '~> 4.8'
 gem 'image_processing', '~> 1.2'
+gem 'activerecord-import', '~> 0.15'
 
 gem 'bootsnap', '>= 1.1.0', require: false
 

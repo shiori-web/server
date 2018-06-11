@@ -6,11 +6,10 @@ RSpec.describe Anime, type: :model do
   it { is_expected.to have_many(:tags) }
   it { is_expected.to have_many(:genres) }
   it { is_expected.to have_many(:characters) }
+  it { is_expected.to have_many(:casts) }
   it { is_expected.to have_many(:staffs) }
-  it { is_expected.to have_many(:performers) }
+  it { is_expected.to have_many(:anime_producers) }
   it { is_expected.to have_many(:producers) }
-  it { is_expected.to have_many(:studios) }
-  it { is_expected.to have_many(:licensors) }
 
   it { is_expected.to validate_presence_of(:titles) }
   it 'should validate titles contains english version' do

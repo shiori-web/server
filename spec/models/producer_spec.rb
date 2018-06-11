@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe Company, type: :model do
-  subject { build(:company) }
+RSpec.describe Producer, type: :model do
+  subject { build(:producer) }
 
   it { is_expected.to validate_presence_of(:name) }
   it { is_expected.to validate_uniqueness_of(:name) }

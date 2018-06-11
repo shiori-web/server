@@ -74,6 +74,7 @@ class User < ApplicationRecord
   end
 
   def send_confirm_email
+    return if Rails.env.test?
     opts = { user_id: id, redirect_url: redirect_url }
     UserMailer.with(opts).confirm_email.deliver_later
   end

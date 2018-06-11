@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe CompanyPolicy do
-  subject { CompanyPolicy.new(user, company) }
+RSpec.describe ProducerPolicy do
+  subject { ProducerPolicy.new(user, producer) }
 
-  let(:company) { create(:company) }
+  let(:producer) { create(:producer) }
 
   context 'for a visitor' do
     let(:user) { nil }

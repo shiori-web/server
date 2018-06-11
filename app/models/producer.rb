@@ -1,6 +1,6 @@
 class Producer < ApplicationRecord
-  belongs_to :anime
-  belongs_to :company
+  include Nameable
 
-  delegate :name, :info, to: :company
+  has_many :anime_producers, dependent: :destroy
+  has_many :animes, through: :anime_producers
 end
