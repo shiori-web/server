@@ -6,7 +6,7 @@ module MyAnimeList
         rating(sidebar)
       )
 
-      data.merge(
+      data.merge!(
         desc: desc(node),
         cover: cover(sidebar),
         titles: titles(sidebar),
@@ -15,8 +15,13 @@ module MyAnimeList
         producers: producers(sidebar),
         studios: studios(sidebar),
         licensors: licensors(sidebar),
-        genres: genres(sidebar)
+        genres: genres(sidebar),
+        adaptation: adaptation(sidebar),
+        episode_duration: episode_duration(sidebar)
       )
+
+      character = CharacterAndStaff.new(character_url(node))
+      data.merge!(character.get)
     end
 
     private
@@ -99,6 +104,10 @@ module MyAnimeList
 
     def desc(node)
       node.xpath('//span[@itemprop="description"]').text.strip
+    end
+
+    def character_url(node)
+      node.xpath('//a[contains(text(), "Characters & Staff")]/@href').text.strip
     end
 
     def parse_date(date_str)
