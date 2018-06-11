@@ -15,18 +15,6 @@ class Anime < ApplicationRecord
     small: '225x320>'
   }
 
-  def status
-    if started_at.nil?
-      :TBA
-    elsif started_at.future?
-      :Upcoming
-    elsif ended_at.nil? || ended_at.future?
-      :Ongoing
-    else
-      :Finished
-    end
-  end
-
   private
 
   def slug_candidates

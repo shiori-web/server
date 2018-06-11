@@ -1,6 +1,6 @@
 class Cast < ApplicationRecord
   enum locale: %i[en jp]
-  enum role: %i[main support]
+  enum role: %i[main supporting]
 
   belongs_to :anime
   belongs_to :person

@@ -1,0 +1,2 @@
+class MangaCharacterResource < BaseResource
+end

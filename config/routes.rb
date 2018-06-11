@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get 'confirm' => 'confirmations#show'
 
   jsonapi_resources :animes
+  jsonapi_resources :mangas
   jsonapi_resources :casts
   jsonapi_resources :characters
   jsonapi_resources :producers

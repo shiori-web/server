@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_10_060926) do
+ActiveRecord::Schema.define(version: 2018_06_11_150300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -64,6 +64,13 @@ ActiveRecord::Schema.define(version: 2018_06_10_060926) do
     t.index ["slug"], name: "index_animes_on_slug", unique: true
   end
 
+  create_table "authors", force: :cascade do |t|
+    t.bigint "person_id"
+    t.bigint "manga_id"
+    t.index ["manga_id"], name: "index_authors_on_manga_id"
+    t.index ["person_id"], name: "index_authors_on_person_id"
+  end
+
   create_table "casts", force: :cascade do |t|
     t.integer "role", null: false
     t.integer "locale", null: false
@@ -113,6 +120,31 @@ ActiveRecord::Schema.define(version: 2018_06_10_060926) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_genres_on_name", unique: true
+  end
+
+  create_table "manga_characters", force: :cascade do |t|
+    t.integer "role", null: false
+    t.bigint "manga_id"
+    t.bigint "character_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_id"], name: "index_manga_characters_on_character_id"
+    t.index ["manga_id"], name: "index_manga_characters_on_manga_id"
+  end
+
+  create_table "mangas", force: :cascade do |t|
+    t.hstore "titles", null: false
+    t.string "slug", null: false
+    t.text "desc"
+    t.date "started_at"
+    t.date "ended_at"
+    t.integer "subtype", default: 0
+    t.integer "age_rating"
+    t.string "age_rating_guide"
+    t.string "sub_titles", array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_mangas_on_slug", unique: true
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
@@ -169,6 +201,13 @@ ActiveRecord::Schema.define(version: 2018_06_10_060926) do
     t.hstore "info"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "publishers", force: :cascade do |t|
+    t.bigint "manga_id"
+    t.bigint "producer_id"
+    t.index ["manga_id"], name: "index_publishers_on_manga_id"
+    t.index ["producer_id"], name: "index_publishers_on_producer_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -232,14 +271,20 @@ ActiveRecord::Schema.define(version: 2018_06_10_060926) do
 
   add_foreign_key "anime_producers", "animes"
   add_foreign_key "anime_producers", "producers"
+  add_foreign_key "authors", "mangas"
+  add_foreign_key "authors", "people"
   add_foreign_key "casts", "animes"
   add_foreign_key "casts", "characters"
   add_foreign_key "casts", "people"
   add_foreign_key "categories", "genres"
+  add_foreign_key "manga_characters", "characters"
+  add_foreign_key "manga_characters", "mangas"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
+  add_foreign_key "publishers", "mangas"
+  add_foreign_key "publishers", "producers"
   add_foreign_key "staffs", "animes"
   add_foreign_key "staffs", "people"
   add_foreign_key "taggings", "tags"

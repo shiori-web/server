@@ -12,4 +12,16 @@ module Media
     has_many :taggings, as: :taggable, dependent: :destroy
     has_many :tags, through: :taggings
   end
+
+  def status
+    if started_at.nil?
+      :TBA
+    elsif started_at.future?
+      :Upcoming
+    elsif ended_at.nil? || ended_at.future?
+      :Ongoing
+    else
+      :Finished
+    end
+  end
 end
