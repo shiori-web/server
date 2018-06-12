@@ -2,15 +2,15 @@ version: '3'
 services:
   db:
     image: postgres:9.4.1
-    ports:
-      - "5432:5432"
+    volumes:
+      - shioridata:/var/lib/postgresql/data
     env_file:
       - .env.docker
 
   redis:
     image: redis
-    ports:
-      - "6379:6379"
+    volumes:
+      - shioriredisdata:/data
     env_file:
       - .env.docker
 
@@ -19,10 +19,25 @@ services:
     command: bin/rails server -p 3000 -b 0.0.0.0
     ports:
       - "3000:3000"
-    links:
+    depends_on:
       - db
       - redis
     volumes:
       - .:/shiori
     env_file:
       - .env.docker
+
+  sidekiq:
+    build: .
+    command: sidekiq -C config/sidekiq.yml
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - .:/shiori
+    env_file:
+      - .env.docker
+
+volumes:
+  shioridata:
+  shioriredisdata:
