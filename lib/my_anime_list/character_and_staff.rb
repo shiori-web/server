@@ -33,13 +33,16 @@ module MyAnimeList
     private
 
     def cast(table)
+      people = people(table)
       cast_role = table.xpath('.//td[2]/div/small').text.strip
-      cast_locale = table.xpath('.//td[1]/small').text.strip
+      cast_locales = table.xpath('.//td[1]/small').map { |small| small.text.strip }
+      cast_locales.each_with_index do |locale, i|
+        people[i][:locale] = locale
+      end
 
       {
         role: cast_role,
-        locale: cast_locale,
-        person: person(table),
+        people: people,
         character: character(table)
       }
     end
@@ -51,11 +54,13 @@ module MyAnimeList
       }
     end
 
-    def person(table)
-      {
-        id: get_id(table.xpath('.//td[1]/a/@href').text.strip),
-        name: table.xpath('.//td[1]/a').text.strip
-      }
+    def people(table)
+      table.xpath('.//td[1]/a').map do |item|
+        {
+          id: get_id(item.xpath('./@href').text.strip),
+          name: item.text.strip
+        }
+      end
     end
 
     def character(table)
