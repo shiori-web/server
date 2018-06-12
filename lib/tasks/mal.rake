@@ -1,5 +1,9 @@
 namespace :mal do
   MAL_DIR = Rails.root.join('db/data/mal').to_s
+  LOCALES = {
+    'Japanese' => 'jp',
+    'English' => 'en'
+  }
 
   desc 'MyAnimeList import!'
   task :import, [:from, :to] => :environment do |t, args|
@@ -11,24 +15,30 @@ namespace :mal do
     ApplicationRecord.transaction do
       filename = "#{from}-#{to}.json"
 
-      # people_path = File.join(MAL_DIR, "people/#{filename}")
-      # people_info = JSON.parse(File.read(people_path))
-      # people = people_info.keys.sort.map do |key|
-      #   name = people_info[key]
-      #   next if name.blank?
-      #   Person.new(name: name)
-      # end.compact
+      people_map = {}
+      people_path = File.join(MAL_DIR, "people/#{filename}")
+      people_info = JSON.parse(File.read(people_path))
+      people = people_info.keys.sort.map do |key|
+        name = people_info[key]
+        next if name.blank?
+        person = Person.new(name: name)
+        people_map[key] = person
+        person
+      end.compact
 
-      # characters_path = File.join(MAL_DIR, "characters/#{filename}")
-      # characters_info = JSON.parse(File.read(characters_path))
-      # characters = characters_info.keys.sort.map do |key|
-      #   name = characters_info[key]
-      #   next if name.blank?
-      #   Character.new(name: name)
-      # end.compact
+      characters_map = {}
+      characters_path = File.join(MAL_DIR, "characters/#{filename}")
+      characters_info = JSON.parse(File.read(characters_path))
+      characters = characters_info.keys.sort.map do |key|
+        name = characters_info[key]
+        next if name.blank?
+        character = Character.new(name: name)
+        characters_map[key] = character
+        character
+      end.compact
 
-      # Person.import! people
-      # Character.import! characters
+      Person.import! people
+      Character.import! characters
 
       animes_path = File.join(MAL_DIR, "animes/#{filename}")
       animes_info = JSON.parse(File.read(animes_path))
@@ -55,14 +65,45 @@ namespace :mal do
           anime.categories.build(genre_id: genre.id)
         end
 
-        anime
+        anime_info['casts'].each do |cast|
+          cast['people'].each do |person_info|
+            person = people_map[person_info['id']]
+            character = characters_map[cast['character']['id']]
+            locale = LOCALES[person_info['locale']]
+            next if person.nil? || character.nil? || locale.nil?
+
+            anime.casts.build(
+              locale: locale,
+              person_id: person.id,
+              character_id: character.id,
+              role: cast['role'].downcase
+            )
+          end
+        end
+
+        anime_info['staffs'].each do |staff|
+          person = people_map[staff['person']['id']]
+          next unless person
+
+          anime.staffs.build(person_id: person.id, role: staff['role'])
+        end
+
+        cover_url = anime_info['cover']
+        if cover_url.present?
+          anime.cover.attach(
+            io: open(cover_url),
+            filename: File.basename(cover_url)
+          )
+        end
+
+        anime.save!
       end
 
-      animes.each do |anime|
-        anime.run_callbacks(:validation) { false }
-      end
+      # animes.each do |anime|
+      #   anime.run_callbacks(:validation) { false }
+      # end
 
-      Anime.import! animes, recursive: true
+      # Anime.import! animes, recursive: true
     end
   end
 
@@ -96,9 +137,9 @@ namespace :mal do
     base_dir = File.join(MAL_DIR, 'animes').to_s
 
     animes = []
-    # people = []
-    # producers = []
-    # characters = []
+    people = []
+    producers = []
+    characters = []
 
     (from..to).each do |id|
       file_path = File.join(base_dir, "#{id}.json")
@@ -106,9 +147,9 @@ namespace :mal do
         puts "reading anime: #{id}..."
         info = JSON.parse(File.read(file_path))
 
-        # people += get_people(info)
-        # producers += get_producers(info)
-        # characters += get_characters(info)
+        people += get_people(info)
+        producers += get_producers(info)
+        characters += get_characters(info)
 
         animes << info
       else
@@ -119,9 +160,9 @@ namespace :mal do
     puts "combining from #{from} to #{to}..."
 
     filename = "#{from}-#{to}.json"
-    # combine_people(people, filename)
-    # combine_producers(producers, filename)
-    # combine_characters(characters, filename)
+    combine_people(people, filename)
+    combine_producers(producers, filename)
+    combine_characters(characters, filename)
 
     File.open(File.join(base_dir, filename), 'w') do |f|
       f.write(animes.to_json)

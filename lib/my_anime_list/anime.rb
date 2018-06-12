@@ -39,7 +39,7 @@ module MyAnimeList
     end
 
     def cover(node)
-      node.xpath('//img[@itemprop="image"]/@src').text.strip
+      node.xpath('.//img[@itemprop="image"]/@src').text.strip
     end
 
     def show_type(node)
@@ -76,7 +76,7 @@ module MyAnimeList
     end
 
     def dates(node)
-      date_range = node.xpath('//div[./span[contains(text(), "Aired:")]]/text()').text.strip
+      date_range = node.xpath('.//div[./span[contains(text(), "Aired:")]]/text()').text.strip
       started_at, ended_at = date_range.split('to').map { |date_str| parse_date(date_str.strip) }.compact
       { started_at: started_at, ended_at: ended_at }
     end
@@ -86,12 +86,12 @@ module MyAnimeList
     end
 
     def no_link_info(node, text)
-      selector = "//div[./span[contains(text(), \"#{text}\")]]/text()"
+      selector = ".//div[./span[contains(text(), \"#{text}\")]]/text()"
       node.xpath(selector).text.strip
     end
 
     def info_link(node, text)
-      node.xpath("//div[./span[contains(text(), \"#{text}\")]]/a")
+      node.xpath(".//div[./span[contains(text(), \"#{text}\")]]/a")
     end
 
     def info_links(node, text)

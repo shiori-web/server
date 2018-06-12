@@ -5,7 +5,7 @@ class AnimePolicy < ApplicationPolicy
   ].freeze
 
   NON_VIEWABLE_FIELDS = %i[
-    genres base64_cover base64_cover_filename
+    base64_cover base64_cover_filename
   ].freeze
 
   def fetchable_fields(all)
