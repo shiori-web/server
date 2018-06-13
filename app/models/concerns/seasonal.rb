@@ -7,7 +7,7 @@ module Seasonal
     end
 
     scope :year, ->(year) do
-      where('EXTRACT(YEAR FROM started_at) = ?', year.to_i)
+      where('EXTRACT(YEAR FROM started_at) IN (?)', year)
     end
 
     %i[spring summer fall].each do |season|

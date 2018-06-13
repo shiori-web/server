@@ -14,6 +14,27 @@ class AnimeResource < BaseResource
 
   attributes *(FIELDS + VIRTUAL_FIELDS)
 
+  filter :year,
+    verify: ->(values, _context) {
+      value = values[0]
+      return [] unless value
+
+      if value =~ /\A\d+(\.\.\d+)?\z/
+        range = value.split('..').map(&:to_i)
+        range.size > 1 ? Range.new(*range).to_a : range
+      else
+        []
+      end
+    },
+    apply: ->(records, values, _context) {
+      records.year(values)
+    }
+
+  filter :season, apply: ->(records, values, _context) {
+    %w[winter spring summer fall].include?(values[0]) ?
+      records.season(values[0]) : records.none
+  }
+
   has_many :casts
   has_many :characters
   has_many :genres

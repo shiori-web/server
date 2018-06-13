@@ -19,4 +19,10 @@ class AnimePolicy < ApplicationPolicy
   def updatable_fields(all)
     creatable_fields(all)
   end
+
+  class Scope < Scope
+    def resolve
+      scope.with_attached_cover
+    end
+  end
 end

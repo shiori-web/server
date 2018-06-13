@@ -16,13 +16,17 @@ module Uploadable
       end
 
       define_method "#{field}_url" do
-        UrlService.url_for public_send(field)
+        image = public_send(field)
+        return unless image.attached?
+        image.service_url
       end
 
       if versions = opts[:versions]
         versions.each do |version, flag|
           define_method "#{version}_#{field}_url" do
-            UrlService.url_for public_send(field).variant(resize: flag)
+            image = public_send(field)
+            return unless image.attached?
+            image.variant(resize: flag).service_url
           end
         end
       end
