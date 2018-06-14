@@ -31,8 +31,32 @@ class AnimeResource < BaseResource
     }
 
   filter :season, apply: ->(records, values, _context) {
-    %w[winter spring summer fall].include?(values[0]) ?
-      records.season(values[0]) : records.none
+    return records.none unless values
+    if date = Time.zone.parse(values[0].to_s).try(:to_date)
+      season = Anime.month_to_season(date.month)
+      # records.public_send(season, date.year)
+      records
+    else
+      records.none
+    end
+  }
+
+  filter :status, apply: ->(records, values, _context) {
+    value = values && values[0]
+    return records.none unless value
+
+    case value
+    when 'tba'
+      records.where(started_at: nil, ended_at: nil)
+    when 'upcoming'
+      records.where('started_at > ?', Date.current)
+    when 'ongoing'
+      records.where('ended_at > ? OR ended_at IS NULL', Date.current)
+    when 'finished'
+      records.where('ended_at <= ?', Date.current)
+    else
+      records.none
+    end
   }
 
   has_many :casts
