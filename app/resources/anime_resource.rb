@@ -1,18 +1,7 @@
-class AnimeResource < BaseResource
-  FIELDS = %i[
-    titles slug desc started_at
-    ended_at show_type age_rating
-    age_rating_guide adaptation
-    episode_duration sub_titles
-  ].freeze
+class AnimeResource < MediaResource
+  index MediaIndex::Anime
 
-  VIRTUAL_FIELDS = %i[
-    season year season_year status
-    cover_url small_cover_url title
-    base64_cover base64_cover_filename
-  ].freeze
-
-  attributes *(FIELDS + VIRTUAL_FIELDS)
+  attributes :episode_duration, :show_type, :adaptation
 
   filter :year,
     verify: ->(values, _context) {
@@ -30,40 +19,26 @@ class AnimeResource < BaseResource
       records.year(values)
     }
 
-  filter :season, apply: ->(records, values, _context) {
-    return records.none unless values
-    if date = Time.zone.parse(values[0].to_s).try(:to_date)
-      season = Anime.month_to_season(date.month)
-      # records.public_send(season, date.year)
-      records
-    else
-      records.none
-    end
-  }
+  query :season,
+    valid: ->(value, _opts) {
+      value =~ /\A(\w+)-(\d{4})\z/
+    },
+    apply: ->(values, _context) {
+      season, year = values[0].match(/\A(\w+)-(\d{4})\z/).captures
+      {
+        bool: {
+          must: [
+            { match: { season: season } },
+            { match: { season_year: year } }
+          ]
+        }
+      }
+    }
 
-  filter :status, apply: ->(records, values, _context) {
-    value = values && values[0]
-    return records.none unless value
-
-    case value
-    when 'tba'
-      records.where(started_at: nil, ended_at: nil)
-    when 'upcoming'
-      records.where('started_at > ?', Date.current)
-    when 'ongoing'
-      records.where('ended_at > ? OR ended_at IS NULL', Date.current)
-    when 'finished'
-      records.where('ended_at <= ?', Date.current)
-    else
-      records.none
-    end
-  }
+  query :status
 
   has_many :casts
-  has_many :characters
-  has_many :genres
+  has_many :staffs
   has_many :producers
   has_many :anime_producers
-  has_many :staffs
-  has_many :tags
 end

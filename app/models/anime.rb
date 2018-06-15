@@ -3,6 +3,8 @@ class Anime < ApplicationRecord
   include AgeRatings
   include Uploadable
 
+  update_index('media#anime') { self }
+
   enum show_type: %i[NA TV Movie OVA ONA Special Music]
 
   has_many :anime_producers, dependent: :destroy

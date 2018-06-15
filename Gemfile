@@ -8,6 +8,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.11'
 
 gem 'redis', '~> 4.0'
+gem 'chewy', '~> 5.0.0'
 gem 'sidekiq', '~> 5.1.3'
 gem 'bcrypt', '~> 3.1.7'
 gem 'mini_magick', '~> 4.8'

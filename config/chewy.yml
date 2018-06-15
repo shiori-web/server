@@ -1,0 +1,14 @@
+default: &default
+  host: <%= ENV['ELASTIC_HOST'] %>
+
+test:
+  <<: *default
+  prefix: test
+
+development:
+  <<: *default
+  prefix: dev
+
+production:
+  <<: *default
+  prefix: prod

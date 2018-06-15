@@ -1,4 +1,5 @@
 class BaseResource < JSONAPI::Resource
+  include SearchableResource
   include JSONAPI::Authorization::PunditScopedResource
 
   abstract
